@@ -84,12 +84,11 @@ int
 ask_user_input()
 {
 	do {
-		printf("Please enter a value between 1 and 10 inclusive\t");
-		scanf("%d", &incVal);
+            printf("Please enter a value between 1 and 10 inclusive\t");
+            scanf("%d", &incVal);
 	} while (invalid(incVal));
 	
-	return incVal;
-
+        return incVal;
 }
 
 /*
@@ -126,14 +125,14 @@ void user_plays (void)
 		incVal = ask_user_input();
 		printf("You picked %d\n", incVal);
    		curVal += incVal;
-    	if (curVal > 100) {
-      		printf("You called number > 100\n");
-      		break;
-    	}
-    	if ( curVal == 100 ) {
-			printf("Congrats: you won!\n");
-   			exit(0);
-    	}
+    	        if (curVal > 100) {
+      		    printf("You called number > 100\n");
+      		    break;
+    	        }
+    	        if ( curVal == 100 ) {
+		     printf("Congrats: you won!\n");
+   		     exit(0);
+    	        }
 		/* signal computer to play */
 		signal_computer();
 	}
