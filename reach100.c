@@ -1,5 +1,6 @@
 /*
- * A puzzle game: version 0.9
+ * A puzzle game: version 0.1
+ * Praveen Dwivedi: 01/01/2009
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -54,9 +55,9 @@ void initialize_game() {
 	pthread_create(&display_thread, NULL, display_cur_val, NULL);
 	pthread_create(&computer_thread, NULL, computer_plays, NULL);
 
-	pthread_mutex_init(&signal_comp_mutex, NULL);
-    pthread_cond_init(&signal_comp_cond, NULL);
-    pthread_cond_init(&signal_user_cond, NULL);
+        pthread_mutex_init(&signal_comp_mutex, NULL);
+        pthread_cond_init(&signal_comp_cond, NULL);
+        pthread_cond_init(&signal_user_cond, NULL);
 
 	game_is_on = 0;
 	keys[0] = 1;
@@ -98,8 +99,8 @@ static inline void signal_user (void)
 {
     pthread_mutex_lock(&signal_comp_mutex);
 	computer_is_playing = 0;
-    pthread_mutex_unlock(&signal_comp_mutex);
     pthread_cond_signal(&signal_user_cond);
+    pthread_mutex_unlock(&signal_comp_mutex);
 }
 
 /*
@@ -108,9 +109,9 @@ static inline void signal_user (void)
 static inline void signal_computer (void)
 {
     pthread_mutex_lock(&signal_comp_mutex);
-	computer_is_playing = 1;
-    pthread_mutex_unlock(&signal_comp_mutex);
+    computer_is_playing = 1;
     pthread_cond_signal(&signal_comp_cond);
+    pthread_mutex_unlock(&signal_comp_mutex);
 }
 
 void user_plays (void)
@@ -118,6 +119,7 @@ void user_plays (void)
 	while (1) {
 	   	pthread_mutex_lock(&signal_comp_mutex);	
 		while (computer_is_playing) {
+                        printf("Computer is playing, You must wait\n");
 			pthread_cond_wait(&signal_user_cond, &signal_comp_mutex);
 		}
 		pthread_mutex_unlock(&signal_comp_mutex);
@@ -145,6 +147,7 @@ void computer_plays()
 	while (1) {
 	    pthread_mutex_lock(&signal_comp_mutex);	
 		while (!computer_is_playing) {
+                        printf("You are playing, I must wait\n");
 			pthread_cond_wait(&signal_comp_cond, &signal_comp_mutex);
 		}
 		pthread_mutex_unlock(&signal_comp_mutex);
